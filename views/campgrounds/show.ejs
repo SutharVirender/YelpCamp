@@ -22,6 +22,32 @@
                 3 days ago
             </div>
           </div>
+          <form action="/campgrounds/<%=camp._id%>/review" method="POST" class="mb-3 validated-form" novalidate>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input class="form-range" type="range" min=1 max=5 name="review[rating]" id="rating">
+            </div>
+            <div class="mb-3">
+              <label for="reviewbody" class="form-label">Review</label>
+              <textarea class="form-control" name="review[reviewbody]" id="reviewbody" cols="30" rows="3" required></textarea>
+              <div class="valid-feedback">Looks Good!!</div>
+            </div>
+            <button class="btn btn-success">Submit</button>
+          </form>
+          <% for(let review of camp.reviews) {%>
+            <div class="card mb-3 ">
+              <div class="card-body">
+                  <h5 class="card-title">Rating: <%= review.rating %></h5>
+                  <p class="card-text">Review: <%= review.reviewbody %></p>
+                  <form action="/campgrounds/<%=camp._id%>/review/<%=review._id%>?_method=DELETE" method="POST">
+                  <button class="btn btn-sm btn-danger">
+                    Delete
+                  </button>
+                  </form>
+              </div>
+            </div>
+          <% } %> 
+
     </div>
 </div>
 
