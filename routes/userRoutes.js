@@ -39,4 +39,4 @@ router.get("/logout",(req,res)=>{
     req.flash("success","GoodBye!!!");
     res.redirect("/campgrounds");
 });
-module.exports=router;  
+module.exports=router; 
