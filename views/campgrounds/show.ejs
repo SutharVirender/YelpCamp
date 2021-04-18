@@ -48,6 +48,7 @@
                 <label for="rating" class="form-label">Rating</label>
                 <input class="form-range" type="range" min=1 max=5 name="review[rating]" id="rating">
             </div>
+            <div id='map' style='width:100%; height: 300px;'></div>
             <% if(currentUser) {%> 
             <div class="mb-3">
               <label for="reviewbody" class="form-label">Review</label>
@@ -76,4 +77,10 @@
 
     </div>
 </div>
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>'
+  const campground = <%-JSON.stringify(camp)%>
+</script>
+
+<script src="/javascripts/MapShow.js"></script>
 

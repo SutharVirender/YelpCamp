@@ -8,9 +8,12 @@ const multer=require("multer");
 const {storage}=require("../cloudinary");
 const upload=multer({storage});
 const {cloudinary}=require("../cloudinary");
+const mbgeocoding=require("@mapbox/mapbox-sdk/services/geocoding");
+const mapBoxToken=process.env.MAPBOX_TOKEN;
+const geocoder=mbgeocoding({accessToken:mapBoxToken});
 
 router.get("/",catchAsync(async(req,res)=>{
-    const campgrounds=await campground.find({});
+    const campgrounds=await campground.find({}).populate('popupText');
     res.render('campgrounds/index',{campgrounds});
 }));
 router.get("/new",isLoggedIn,(req,res)=>{
@@ -36,7 +39,12 @@ router.get("/:id/edit",isLoggedIn,isAuthor,catchAsync(async(req,res)=>{
 
 
 router.post("/",isLoggedIn,upload.array("image"),validateCampground,catchAsync(async (req,res,next)=>{
+    const geoData=await geocoder.forwardGeocode({
+        query:req.body.campground.location,
+        limit:1
+    }).send()
     const newcampground=new campground(req.body.campground);
+    newcampground.geometry=geoData.body.features[0].geometry;
     newcampground.img=req.files.map(f=>({url: f.path,filename: f.filename}));
     newcampground.author=req.user._id;
     console.log(newcampground);
