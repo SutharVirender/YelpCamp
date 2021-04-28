@@ -1,10 +1,23 @@
 mapboxgl.accessToken = mapToken;
+var x=-103.59179687498357;
+var y=40.66995747013945;
+// if ('geolocation' in navigator){
+//     // console.log("hfjsdbvhsdbvjhv")
+//     navigator.geolocation.getCurrentPosition(showPosition)
+// }else{
+//     console.log("hi")
+// }
+// function showPosition(position) {
+//     var x=position.coords.latitude;
+//     var y=position.coords.longitude;
+// }
 const map = new mapboxgl.Map({
-    container: 'map',
+    container: 'cluster-map',
     style: 'mapbox://styles/mapbox/light-v10',
     center: [-103.59179687498357, 40.66995747013945],
     zoom: 3
 });
+map.addControl(new mapboxgl.NavigationControl());
 map.on('load', function () {
     // Add a new source from our GeoJSON data and
     // set the 'cluster' option to true. GL-JS will
@@ -86,7 +99,7 @@ map.on('load', function () {
             clusterId,
             function (err, zoom) {
                 if (err) return;
-
+                // console.log(features)
                 map.easeTo({
                     center: features[0].geometry.coordinates,
                     zoom: zoom

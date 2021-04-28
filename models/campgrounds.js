@@ -18,6 +18,15 @@ const campgroundschema=new Schema({
     location: String,
     price: Number,
     description: String,
+    visited:{
+        type:Number,
+        default:0
+
+    },
+    createdAt:{
+        type:Date,
+        default:Date.now
+    },
     img:[ImageSchema],
     geometry:{
         type:{

@@ -9,12 +9,34 @@ const {storage}=require("../cloudinary");
 const upload=multer({storage});
 const {cloudinary}=require("../cloudinary");
 const mbgeocoding=require("@mapbox/mapbox-sdk/services/geocoding");
+const campgrounds = require("../models/campgrounds");
 const mapBoxToken=process.env.MAPBOX_TOKEN;
 const geocoder=mbgeocoding({accessToken:mapBoxToken});
+// const geolocation = require('geolocation')
+// const navigator=require('browser-env')(["navigator"]);
+// console.log(navigator.geolocation)
+
 
 router.get("/",catchAsync(async(req,res)=>{
-    const campgrounds=await campground.find({}).populate('popupText');
-    res.render('campgrounds/index',{campgrounds});
+    var x=0;
+    var campgrounds=await campground.find({}).sort({"createdAt":-1}).populate('popupText');
+    // console.log(campgrounds)
+    res.render('campgrounds/index',{campgrounds,x});
+}));
+router.get("/x=:s",catchAsync(async(req,res)=>{
+    var x=req.params.s;
+    // console.log(x)
+    if(x=='0'){
+        var campgrounds=await campground.find({}).sort({"createdAt":-1}).populate('popupText');
+    }
+    else if(x=='1'){
+        var campgrounds=await campground.find({}).sort({"createdAt":1}).populate('popupText');
+    }
+    else{
+        var campgrounds=await campground.find({}).sort({"visited":-1}).populate('popupText');
+    }
+    // console.log(campgrounds)
+    res.render('campgrounds/index',{campgrounds,x});
 }));
 router.get("/new",isLoggedIn,(req,res)=>{
     res.render("campgrounds/new");
@@ -25,6 +47,8 @@ router.get("/:id",catchAsync(async(req,res)=>{
         req.flash('error', 'Cannot find that campground!');
         return res.redirect('/campgrounds');
     }
+    const t=camp.visited;
+    await campgrounds.findByIdAndUpdate(req.params.id,{visited:t+1});
     res.render("campgrounds/show",{camp});
 }));
 router.get("/:id/edit",isLoggedIn,isAuthor,catchAsync(async(req,res)=>{
@@ -53,7 +77,12 @@ router.post("/",isLoggedIn,upload.array("image"),validateCampground,catchAsync(a
     res.redirect('/campgrounds/'+newcampground._id);
 }));
 router.put("/:id",isLoggedIn,isAuthor,upload.array("image"),validateCampground,catchAsync(async(req,res)=>{
-    const camp=await campground.findByIdAndUpdate(req.params.id,{ ...req.body.campground });
+    const geoData=await geocoder.forwardGeocode({
+        query:req.body.campground.location,
+        limit:1
+    }).send()
+    // const t=await campground.findByIdAndUpdate(req.params.id,{geometry:geoData.body.features[0].geometry});
+    const camp=await campground.findByIdAndUpdate(req.params.id,{ ...req.body.campground,geometry:geoData.body.features[0].geometry});
     const imgs=req.files.map(f=>({url: f.path,filename: f.filename}));
     camp.img.push(...imgs);
     await camp.save();

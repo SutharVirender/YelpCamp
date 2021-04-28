@@ -34,6 +34,7 @@ const seedDB = async () => {
                     cities[random1000].latitude,
                 ]
             },
+            visited:0,
             img: [
                 {
                     url: 'https://res.cloudinary.com/viru/image/upload/v1616837412/YelpCamp/xybifyxhe3dh6czxodih.jpg',
@@ -45,7 +46,7 @@ const seedDB = async () => {
                 }
             ],
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
-            price:10,
+            price:price,
             author:"605305e520fd60175c80b874"
         })
         await camp.save();
