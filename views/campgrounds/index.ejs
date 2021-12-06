@@ -24,7 +24,7 @@
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <% for(let campground of campgrounds) {%>
+            <% for(let campground of campgrounds) { if(campground.img[0]!=undefined){%>
             <div class="col mg-8">
                 <div class="card shadow-lg h-100">
                     <img class="img-fluid card-img-top" src="<%=campground.img[0].url%>" alt="">
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <% } %> 
+            <%} } %> 
         </div>
     </div>
 </div>
