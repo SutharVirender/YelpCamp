@@ -9,7 +9,10 @@ const ImageSchema=new Schema({
 });
 
 ImageSchema.virtual('thumbnail').get(function(){
-    return this.url.replace('/upload','/upload/w_200');
+    if (this.url.includes('upload/c_scale,w_450')){
+        return this.url.replace('upload/c_scale,w_450','/upload/w_200,h_200');
+    }
+    return this.url.replace('upload/c_scale,h_300,w_450','/upload/w_200,h_200');
 });
 const opts = { toJSON: { virtuals: true } };
 
@@ -36,8 +39,8 @@ const campgroundschema=new Schema({
         },
         coordinates:{
             type:[Number],
-            required:true
         }
+
     },
     author:{
         type:Schema.Types.ObjectId,
@@ -48,6 +51,7 @@ const campgroundschema=new Schema({
         ref:"Review"
     }]
 },opts);
+campgroundschema.index({geometry:'2dsphere'});
 
 campgroundschema.virtual('properties.popUpMarkup').get(function () {
     return `

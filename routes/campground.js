@@ -17,26 +17,53 @@ const geocoder=mbgeocoding({accessToken:mapBoxToken});
 // console.log(navigator.geolocation)
 
 
+let lat=28.644800;
+let lon=77.216721;
+
 router.get("/",catchAsync(async(req,res)=>{
+    if(req.query.lat){
+    lat=parseFloat(req.query.lat);
+    lon=parseFloat(req.query.lon);
+    }
     var x=0;
-    var campgrounds=await campground.find({}).sort({"createdAt":-1}).populate('popupText');
-    // console.log(campgrounds)
-    res.render('campgrounds/index',{campgrounds,x});
+    var campgr=await campground.find({}).populate('popupText');
+    var campgrounds=await campground.find({
+        geometry:
+          { $near :
+             {
+               $geometry: { type: 'Point',  coordinates: [lon,lat] },
+               $minDistance: 0,
+               $maxDistance: 5000000
+             }
+          }
+      })
+    res.render('campgrounds/index',{campgrounds,x,campgr});
 }));
 router.get("/x=:s",catchAsync(async(req,res)=>{
     var x=req.params.s;
-    // console.log(x)
-    if(x=='0'){
-        var campgrounds=await campground.find({}).sort({"createdAt":-1}).populate('popupText');
+    var campgr=await campground.find({}).populate('popupText');
+    if (x=='0'){
+        var campgrounds=await campground.find({
+            geometry:
+              { $near :
+                 {
+                   $geometry: { type: 'Point',  coordinates: [lon,lat] },
+                   $minDistance: 0,
+                   $maxDistance: 5000000
+                 }
+              }
+          })
     }
     else if(x=='1'){
+        var campgrounds=await campground.find({}).sort({"createdAt":-1}).populate('popupText');
+    }
+    else if(x=='2'){
         var campgrounds=await campground.find({}).sort({"createdAt":1}).populate('popupText');
     }
     else{
         var campgrounds=await campground.find({}).sort({"visited":-1}).populate('popupText');
     }
-    // console.log(campgrounds)
-    res.render('campgrounds/index',{campgrounds,x});
+    res.render('campgrounds/index',{campgrounds,x,campgr});
 }));
 router.get("/new",isLoggedIn,(req,res)=>{
     res.render("campgrounds/new");
@@ -71,7 +98,6 @@ router.post("/",isLoggedIn,upload.array("image"),validateCampground,catchAsync(a
     newcampground.geometry=geoData.body.features[0].geometry;
     newcampground.img=req.files.map(f=>({url: f.path,filename: f.filename}));
     newcampground.author=req.user._id;
-    console.log(newcampground);
     await newcampground.save();
     req.flash('success', 'Successfully made a new campground!');
     res.redirect('/campgrounds/'+newcampground._id);

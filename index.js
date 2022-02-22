@@ -21,8 +21,11 @@ const campgrounds=require("./routes/campground");
 const reviews=require("./routes/review");
 
 app.use(methodoverride('_method'));
+const MongoStore =require("connect-mongo")(session);
 
-mongoose.connect("mongodb://localhost:27017/yelp-camp",{
+dburl=process.env.ATLAS_URL;
+// dburl="mongodb://localhost:27017/yelp-camp"
+mongoose.connect(dburl,{
     useNewUrlParser:true,
     useCreateIndex:true,
     useUnifiedTopology:true,
@@ -44,8 +47,22 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
+
+const store =new MongoStore({
+    url:dburl,
+    secret,
+    touchAfter: 24 * 60 * 60
+});
+
+store.on("error", function (e) {
+    console.log("SESSION STORE ERROR", e)
+})
+
 const sessionConfig = {
-    secret: 'thisshouldbeabettersecret!',
+    store,
+    name:'session',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -85,6 +102,7 @@ app.use((err,req,res,next)=>{
     if (!err.message) err.message ="oh No Something Went Wrong!!"
     res.status(statusCode).render('error',{err});
 });
-app.listen(3000,function(req,res){
-    console.log("###Server has Started visit port 3000");
+const port=process.env.PORT || 3000
+app.listen(port,function(req,res){
+    console.log("###Server has Started visit port "+port);
 });

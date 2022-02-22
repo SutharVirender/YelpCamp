@@ -1,35 +1,45 @@
-mapboxgl.accessToken = mapToken;
-var x=-103.59179687498357;
-var y=40.66995747013945;
-// if ('geolocation' in navigator){
-//     // console.log("hfjsdbvhsdbvjhv")
-//     navigator.geolocation.getCurrentPosition(showPosition)
-// }else{
-//     console.log("hi")
-// }
-// function showPosition(position) {
-//     var x=position.coords.latitude;
-//     var y=position.coords.longitude;
-// }
+window.onload =async ()=>{
+        mapboxgl.accessToken = mapToken;
+        let x=28.644800;
+        let y=77.216721;
+        const getcords= async ()=>{
+            const pos=await new Promise((resolve,reject)=>{
+                navigator.geolocation.getCurrentPosition(resolve,reject)
+            })
+            .catch(err=>{
+                console.log(err.message)
+            })
+            if(pos){
+            return {
+                long:pos.coords.longitude,
+                lat:pos.coords.latitude
+            }
+        }
+        }
+        const coords=await getcords()
+        if(coords){
+        x=coords.lat;
+        y=coords.long;
+        }
 const map = new mapboxgl.Map({
     container: 'cluster-map',
     style: 'mapbox://styles/mapbox/light-v10',
-    center: [-103.59179687498357, 40.66995747013945],
-    zoom: 3
+    center:[y,x],
+    zoom: 5
 });
-map.addControl(new mapboxgl.NavigationControl());
-map.on('load', function () {
-    // Add a new source from our GeoJSON data and
-    // set the 'cluster' option to true. GL-JS will
-    // add the point_count property to your source data.
-    map.addSource('campgrounds', {
-        type: 'geojson',
-        // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-        // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
-        data: campgrounds,
-        cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
+    map.addControl(new mapboxgl.NavigationControl());
+    map.on('load', function () {
+        // Add a new source from our GeoJSON data and
+        // set the 'cluster' option to true. GL-JS will
+        // add the point_count property to your source data.
+        map.addSource('campgrounds', {
+            type: 'geojson',
+            // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
+            // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
+            data: campgrounds,
+            cluster: true,
+            clusterMaxZoom: 14, // Max zoom to cluster points on
+            clusterRadius: 50 // Radius of each cluster when clustering points (defaults to 50)
     });
 
     map.addLayer({
@@ -107,7 +117,15 @@ map.on('load', function () {
             }
         );
     });
-
+    new mapboxgl.Marker()
+    .setLngLat([y,x])
+    .setPopup(
+        new mapboxgl.Popup({ offset: 25 })
+            .setHTML(
+                `<h4>You are Here</h4>`
+            )
+    )
+    .addTo(map)
     // When a click event occurs on a feature in
     // the unclustered-point layer, open a popup at
     // the location of the feature, with
@@ -135,4 +153,5 @@ map.on('load', function () {
     map.on('mouseleave', 'clusters', function () {
         map.getCanvas().style.cursor = '';
     });
-});
+    });
+}
