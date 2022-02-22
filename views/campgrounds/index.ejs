@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,44 +61,24 @@
 <nav class="bd-subnavbar py-2 bg-light" aria-label="Secondary navigation">
     <div class="container-xxl d-flex align-items-md-center">
       <h1 class="position-relative me-auto text-center">All Campgrounds</h1>
-=======
-<% layout("layouts/boilerplate")%>
-<nav class="bd-subnavbar py-2" aria-label="Secondary navigation">
-    <div class="container-xxl d-flex align-items-md-center">
-      <h1 class="position-relative me-auto text-center">
-          All Campgrounds
-      </h1>
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
         <div class="dropdown mb-3">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
               Sort By
             </button>
             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-<<<<<<< HEAD
               <li><a class="dropdown-item <%if(x==0){%>active <%}%>" href="/campgrounds/x=0">Near By</a></li>
               <li><a class="dropdown-item <%if(x==1){%>active <%}%>" href="/campgrounds/x=1">Newly Added</a></li>
               <li><a class="dropdown-item <%if(x==2){%>active <%}%>" href="/campgrounds/x=2">Older</a></li>
               <li><a class="dropdown-item <%if(x==3){%>active <%}%>" href="/campgrounds/x=3">Most Visited</a></li>
-=======
-              <li><a class="dropdown-item <%if(x==0){%>active <%}%>" href="/campgrounds/x=0">Newly Added</a></li>
-              <li><a class="dropdown-item <%if(x==1){%>active <%}%>" href="/campgrounds/x=1">Older</a></li>
-              <li><a class="dropdown-item <%if(x==2){%>active <%}%>" href="/campgrounds/x=2">Most Visited</a></li>
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
               <!-- <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="#">Separated link</a></li> -->
             </ul>
           </div>
   </div>
 </nav>
-<<<<<<< HEAD
 <div class="bg-light">
 <!-- <div id="map" style="width: 100%; height: 500px"></div> -->
 <div class="container" id="cluster-map"></div>
-=======
-<div>
-<!-- <div id="map" style="width: 100%; height: 500px"></div> -->
-<div id="cluster-map"></div>
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
 <div class="album py-5 bg-light">
     <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -121,29 +100,18 @@
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
-            <% }} %> 
-=======
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
-            <%} } %> 
+            <% }} %>
         </div>
     </div>
 </div>
-<<<<<<< HEAD
 
 <script>
     const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-    // const campgrounds = { features: <%- JSON.stringify(campgr) %>}
-=======
-<script>
-    const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-    const campgrounds = { features: <%- JSON.stringify(campgrounds) %>}
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
+    const campgrounds = { features: <%- JSON.stringify(campgr) %>}
 </script>
 
 <script src="/javascripts/clusterMap.js"></script>
 </div>
-<<<<<<< HEAD
 <footer class="footer bg-dark py-3 sticky-bottom mt-auto">
     <div class="container">
         <span class="text-muted">&copy;YelpCamp 2021</span>
@@ -156,5 +124,3 @@
 <script src="/javascripts/validateForms.js"></script>
 </body>
 </html>
-=======
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff

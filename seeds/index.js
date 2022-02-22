@@ -1,18 +1,11 @@
 const mongoose = require('mongoose');
 const cities = require('./cities');
-<<<<<<< HEAD
 const cit=require('./in')
 const { places, descriptors } = require('./seedHelpers');
 const Campground = require('../models/campgrounds');
 const Review=require('../models/review');
 const dburl="mongodb+srv://first_user:puhOwaT6ddaVcExy@yelpcamp.grx20.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 mongoose.connect(dburl, {
-=======
-const { places, descriptors } = require('./seedHelpers');
-const Campground = require('../models/campgrounds');
-
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true
@@ -26,7 +19,6 @@ db.once("open", () => {
 });
 
 const sample = array => array[Math.floor(Math.random() * array.length)];
-<<<<<<< HEAD
 img1=[
     {
         url: 'https://res.cloudinary.com/viru/image/upload/c_scale,h_300,w_450/v1619878172/YelpCamp/nofi-sofyan-hadi-2wcfY2qeFFE-unsplash_zmyprf.jpg',
@@ -104,15 +96,6 @@ const seedDB = async () => {
             author:"608d8bd343ad270015cac9cf"
         })
         await review2.save();
-=======
-
-
-const seedDB = async () => {
-    await Campground.deleteMany({});
-    for (let i = 0; i < 300; i++) {
-        const random1000 = Math.floor(Math.random() * 1000);
-        const price = Math.floor(Math.random() * 20) + 10;
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
         const camp = new Campground({
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
@@ -124,7 +107,6 @@ const seedDB = async () => {
                 ]
             },
             visited:0,
-<<<<<<< HEAD
             img:[img1,img2,img3,img4,img5,img6][i%6],
             reviews:[review1._id,review2._id],
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
@@ -164,21 +146,6 @@ const seedDB = async () => {
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
             price:price,
             author:"608d4116c9cebb1a2c99e33e"
-=======
-            img: [
-                {
-                    url: 'https://res.cloudinary.com/viru/image/upload/v1616837412/YelpCamp/xybifyxhe3dh6czxodih.jpg',
-                    filename: 'YelpCamp/xybifyxhe3dh6czxodih'
-                },
-                {
-                    url: 'https://res.cloudinary.com/viru/image/upload/v1616837364/YelpCamp/tllvcv7ml2ecue6qj8a2.jpg',
-                    filename: 'YelpCamp/tllvcv7ml2ecue6qj8a2'
-                }
-            ],
-            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
-            price:price,
-            author:"605305e520fd60175c80b874"
->>>>>>> dcd7d687346d3cfa6747bdc65fb1bc96e5bcf9ff
         })
         await camp.save();
     }
